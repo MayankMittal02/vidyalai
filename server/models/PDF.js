@@ -1,19 +1,20 @@
 const mongoose = require('mongoose')
 
 const PDFSchema = new mongoose.Schema({
-    name:{
-        type:String
+    name: {
+        type: String
     },
-    createdBy:{
+    createdBy: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
         required: [true, 'Please provide user'],
     },
-    source:{
-        type:String,
-        required:true
-    }
+    source: {
+        type: String,
+        required: true
+    },
+    pages: Number
 
 })
 
-module.exports = mongoose.model("PDF" , PDFSchema);
+module.exports = mongoose.model("PDF", PDFSchema);

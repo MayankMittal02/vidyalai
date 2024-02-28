@@ -5,7 +5,6 @@ const PDF = require('../models/PDF');
 const { StatusCodes } = require('http-status-codes')
 
 
-// const User = require('../models/User')
 
 const uploadPDF = async (req, res) => {
 
@@ -16,18 +15,32 @@ const uploadPDF = async (req, res) => {
         folder: 'vidyalai'
     }
     );
+    console.log(result)
     fs.unlinkSync(req.files.pdf.tempFilePath);
     await PDF.create({
         name: fileName,
         source: result.secure_url,
-        createdBy: req.user.userId
+        createdBy: req.user.userId,
+        pages: result.pages
 
     })
-    res.status(StatusCodes.CREATED).send("file uploaded")
+    res.status(StatusCodes.CREATED).json({ message: "PDF Uploaded" })
+}
+
+const getPDF = async (req, res) => {
+    const { pdfId } = req.params
+    const pdf = await PDF.findOne({ _id: pdfId, createdBy: req.user.userId })
+    res.status(StatusCodes.OK).json({ pdf })
+
+}
+
+const getAllPDF = async (req, res) => {
+    let result = await PDF.find({ createdBy: req.user.userId })
+    res.status(StatusCodes.OK).json({ result })
 }
 
 
 
 module.exports = {
-    uploadPDF
+    uploadPDF,getPDF , getAllPDF
 }

@@ -20,16 +20,15 @@ app.use(fileUpload({ useTempFiles: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors())
-const {uploadPDF} = require('./controller/uploadController')
 const authRouter = require('./routes/authRoutes')
-const uploadRouter = require('./routes/uploadRoutes')
+const pdfRouter = require('./routes/pdfRoutes')
 
 
 
 
 
 app.use('/auth' ,authRouter)
-app.use('/uploadpdf' , uploadRouter)
+app.use('/uploadpdf' , pdfRouter)
 
 app.get('/', (req, res) => {
     res.send('<h1>File Upload Starter</h1>');
