@@ -22,20 +22,19 @@ app.use(express.json());
 app.use(cors())
 const {uploadPDF} = require('./controller/uploadController')
 const authRouter = require('./routes/authRoutes')
+const uploadRouter = require('./routes/uploadRoutes')
 
 
 
 
 
 app.use('/auth' ,authRouter)
+app.use('/uploadpdf' , uploadRouter)
 
 app.get('/', (req, res) => {
     res.send('<h1>File Upload Starter</h1>');
 });
 
-app.post('/' , (req,res)=>{
-    uploadPDF(req,res)
-})
 
 
 // app.post('/' , uploadPDF)
