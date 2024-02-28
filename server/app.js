@@ -28,10 +28,10 @@ const pdfRouter = require('./routes/pdfRoutes')
 
 
 app.use('/auth' ,authRouter)
-app.use('/uploadpdf' , pdfRouter)
+app.use('/pdf' , pdfRouter)
 
 app.get('/', (req, res) => {
-    res.send('<h1>File Upload Starter</h1>');
+    res.send("hello");
 });
 
 

@@ -1,21 +1,22 @@
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
+const fs = require('fs').promises;
 const PDF = require('../models/PDF');
 const { StatusCodes } = require('http-status-codes')
+const { PDFDocument } = require('pdf-lib')
 
 
 
 const uploadPDF = async (req, res) => {
 
     const fileName = req.files.pdf.name
+    console.log(req.files.pdf)
     const result = await cloudinary.uploader.upload(
         req.files.pdf.tempFilePath, {
         use_filename: false,
         folder: 'vidyalai'
     }
     );
-    console.log(result)
     fs.unlinkSync(req.files.pdf.tempFilePath);
     await PDF.create({
         name: fileName,
@@ -39,8 +40,35 @@ const getAllPDF = async (req, res) => {
     res.status(StatusCodes.OK).json({ result })
 }
 
+const createPDF = async (req, res) => {
+
+    try {
+        const filePath = req.files.pdf.tempFilePath;
+        const { selectedPages } = req.body
+
+        const pdfBytes = await fs.readFile(filePath);
+        const pdfDoc = await PDFDocument.load(pdfBytes);
+        const newPdfDoc = await PDFDocument.create();
+        for (const pageNumber of selectedPages) {
+            const [copiedPage] = await newPdfDoc.copyPages(pdfDoc, [pageNumber - 1]);
+            newPdfDoc.addPage(copiedPage);
+        }
+        const newPdfBytes = await newPdfDoc.save();
+        res.contentType("application/pdf");
+
+        res.write(newPdfBytes)
+        res.send()
+    }
+
+    catch (error) {
+        res.send(error)
+    }
+
+
+}
+
 
 
 module.exports = {
-    uploadPDF,getPDF , getAllPDF
+    uploadPDF, getPDF, getAllPDF, createPDF
 }
