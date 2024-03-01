@@ -1,6 +1,6 @@
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
-const fs = require('fs').promises;
+const fs = require('fs');
 const PDF = require('../models/PDF');
 const { StatusCodes } = require('http-status-codes')
 const { PDFDocument } = require('pdf-lib')
@@ -9,15 +9,15 @@ const { PDFDocument } = require('pdf-lib')
 
 const uploadPDF = async (req, res) => {
 
+    console.log("first")
     const fileName = req.files.pdf.name
-    console.log(req.files.pdf)
     const result = await cloudinary.uploader.upload(
         req.files.pdf.tempFilePath, {
         use_filename: false,
         folder: 'vidyalai'
     }
     );
-    fs.unlinkSync(req.files.pdf.tempFilePath);
+    await fs.unlinkSync(req.files.pdf.tempFilePath);
     await PDF.create({
         name: fileName,
         source: result.secure_url,
@@ -25,7 +25,9 @@ const uploadPDF = async (req, res) => {
         pages: result.pages
 
     })
-    res.status(StatusCodes.CREATED).json({ message: "PDF Uploaded" })
+    console.log("second")
+
+    res.status(StatusCodes.CREATED).json({ message: "PDF Uploaded", link:result.secure_url })
 }
 
 const getPDF = async (req, res) => {

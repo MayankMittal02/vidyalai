@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import './App.css'
+import Uploadpdf from '../pages/Uploadpdf.jsx'
 
 function App() {
   return(
   <>
 
 
-    <input type="file" />
-    hello
+    <Uploadpdf></Uploadpdf>
 
   </>)
 }

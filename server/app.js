@@ -34,15 +34,7 @@ app.get('/', (req, res) => {
     res.send("hello");
 });
 
-
-
 // app.post('/' , uploadPDF)
-
-
-
-
-
-
 
 const port = process.env.PORT || 5000;
 
