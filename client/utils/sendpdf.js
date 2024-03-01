@@ -1,6 +1,6 @@
 import { createPDF } from "../apicalls/pdf";
 
-export const sendStoredPdfToBackend = async () => {
+export const sendStoredPdfToBackend = async (selectedPages) => {
     // Retrieve PDF data from local storage
     const pdfData = localStorage.getItem('pdfData');
 
@@ -26,7 +26,7 @@ export const sendStoredPdfToBackend = async () => {
     // Create FormData object
     const formData = new FormData();
     formData.append('pdf', pdfBlob);
-    formData.append('selectedPages' ,'23' )
+    formData.append('selectedPages' ,selectedPages )
 
     const response = await createPDF(formData)
     return response

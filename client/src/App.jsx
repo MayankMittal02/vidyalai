@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import Uploadpdf from '../pages/Uploadpdf.jsx'
-import Createpdf from '../pages/Createpdf.jsx'
+import Home from '../pages/Home.jsx'
 
 function App() {
   return(
@@ -9,7 +9,7 @@ function App() {
 
 
     <Uploadpdf></Uploadpdf>
-    <Createpdf></Createpdf>
+    <Home></Home>
 
   </>)
 }

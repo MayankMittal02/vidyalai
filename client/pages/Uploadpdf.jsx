@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { uploadPDF } from '../apicalls/pdf'
+import Createpdf from './Createpdf'
 
 
 function Uploadpdf() {
 
   const [file, setFile] = useState(null)
+  const [pages, setPages] = useState(0)
 
   function handleFileChange(e) {
     setFile(e.target.files[0])
@@ -27,6 +29,7 @@ function Uploadpdf() {
 
       reader.readAsDataURL(file);
       const response = await uploadPDF(formData)
+      setPages(response.data.pages)
     } catch (error) {
       console.error('Error uploading file: ', error);
     }
@@ -40,6 +43,7 @@ function Uploadpdf() {
         <input type="file" onChange={handleFileChange} />
         <button onClick={handleSubmit}>Upload</button>
       </div>
+      {pages > 0 ? <Createpdf pages={pages}></Createpdf> : null}
 
 
     </>

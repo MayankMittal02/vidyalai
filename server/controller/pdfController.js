@@ -25,7 +25,7 @@ const uploadPDF = async (req, res) => {
 
     })
 
-    res.status(StatusCodes.CREATED).json({ message: "PDF Uploaded", link: result.secure_url })
+    res.status(StatusCodes.CREATED).json({ message: "PDF Uploaded", pages: result.pages })
 }
 
 const getPDF = async (req, res) => {
@@ -44,7 +44,11 @@ const createPDF = async (req, res) => {
 
     try {
         const filePath = req.files.pdf.tempFilePath;
-        const { selectedPages } = req.body
+        var { selectedPages } = req.body
+        // console.log(typeof(selectedPages))
+        selectedPages = selectedPages.replace(/,/g, '');
+
+
 
 
         const pdfBytes = await fs.readFile(filePath);

@@ -13,7 +13,9 @@ const PDFSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    pages: Number
+
+    pages: Number,
+    createdAt: { type: Date, default: Date.now }
 
 })
 
