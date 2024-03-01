@@ -1,15 +1,14 @@
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
+const fs = require('fs').promises;
 const PDF = require('../models/PDF');
 const { StatusCodes } = require('http-status-codes')
-const { PDFDocument } = require('pdf-lib')
+const { PDFDocument, StandardFonts, rgb } = require('pdf-lib')
 
 
 
 const uploadPDF = async (req, res) => {
 
-    console.log("first")
     const fileName = req.files.pdf.name
     const result = await cloudinary.uploader.upload(
         req.files.pdf.tempFilePath, {
@@ -17,7 +16,7 @@ const uploadPDF = async (req, res) => {
         folder: 'vidyalai'
     }
     );
-    await fs.unlinkSync(req.files.pdf.tempFilePath);
+    await fs.unlink(req.files.pdf.tempFilePath);
     await PDF.create({
         name: fileName,
         source: result.secure_url,
@@ -25,9 +24,8 @@ const uploadPDF = async (req, res) => {
         pages: result.pages
 
     })
-    console.log("second")
 
-    res.status(StatusCodes.CREATED).json({ message: "PDF Uploaded", link:result.secure_url })
+    res.status(StatusCodes.CREATED).json({ message: "PDF Uploaded", link: result.secure_url })
 }
 
 const getPDF = async (req, res) => {
@@ -48,6 +46,7 @@ const createPDF = async (req, res) => {
         const filePath = req.files.pdf.tempFilePath;
         const { selectedPages } = req.body
 
+
         const pdfBytes = await fs.readFile(filePath);
         const pdfDoc = await PDFDocument.load(pdfBytes);
         const newPdfDoc = await PDFDocument.create();
@@ -56,10 +55,32 @@ const createPDF = async (req, res) => {
             newPdfDoc.addPage(copiedPage);
         }
         const newPdfBytes = await newPdfDoc.save();
-        res.contentType("application/pdf");
+        editedPdfPath = './tmp/editedpdf.pdf'
+        await fs.writeFile(editedPdfPath, newPdfBytes)
 
-        res.write(newPdfBytes)
-        res.send()
+
+        const result = await cloudinary.uploader.upload(
+            path.resolve('././tmp/editedpdf.pdf'), {
+            use_filename: false,
+            folder: 'vidyalai'
+        }
+        );
+        await fs.unlink(editedPdfPath);
+        await fs.unlink(filePath);
+
+
+
+
+        // res.contentType("application/pdf");
+        // res.setHeader('Content-Length', newPdfBytes.length)
+        // res.set('Content-Disposition', 'attachment; filename="your-filename.pdf"');
+
+        // res.write(pdfBytes)
+        res.status(StatusCodes.CREATED).json({ link: result.secure_url })
+        // res.send("hello")
+
+
+
     }
 
     catch (error) {
