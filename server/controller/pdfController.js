@@ -9,6 +9,11 @@ const { PDFDocument } = require('pdf-lib')
 
 const uploadPDF = async (req, res) => {
 
+
+    if (req.files.pdf.mimetype !== 'application/pdf') {
+        return res.status(400).json({ message: 'Only PDF files are allowed.' });
+    }
+
     const fileName = req.files.pdf.name
     const result = await cloudinary.uploader.upload(
         req.files.pdf.tempFilePath, {
@@ -25,7 +30,7 @@ const uploadPDF = async (req, res) => {
 
     })
 
-    res.status(StatusCodes.CREATED).json({ message: "PDF Uploaded", pages: result.pages })
+    res.status(StatusCodes.CREATED).json({ message: "PDF Uploaded", pages: result.pages,link:result.secure_url })
 }
 
 const getPDF = async (req, res) => {
@@ -49,6 +54,14 @@ const createPDF = async (req, res) => {
         var { selectedPages } = req.body
         selectedPages = selectedPages.split(',').map(item => parseInt(item))
         selectedPages.sort()
+
+        // if(order !==""){
+        //     order = order.split(',').map(item => parseInt(item))
+        //     console.log(order)
+        //     selectedPages = order
+
+        // }
+
         const pdfBytes = await fs.readFile(filePath);
         const pdfDoc = await PDFDocument.load(pdfBytes);
         const newPdfDoc = await PDFDocument.create();

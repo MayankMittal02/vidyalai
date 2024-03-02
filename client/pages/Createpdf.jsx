@@ -8,6 +8,7 @@ function Createpdf({ pages, file }) {
   const [link, setLink] = useState(null)
   const [selectedPages, setSelectedPages] = useState([])
   const [loading, setLoading] = useState(true)
+  // const [order, setOrder] = useState("")
 
   const handleDownload = () => {
     window.open(link, '_blank');
@@ -21,6 +22,7 @@ function Createpdf({ pages, file }) {
       const formData = new FormData();
       formData.append('pdf', file);
       formData.append('selectedPages', selectedPages)
+      // formData.append('order' , order)
       const response = await createPDF(formData)
       setLink(response.data.link)
       setLoading(false)
@@ -54,7 +56,12 @@ function Createpdf({ pages, file }) {
       <div>
         select pages:
         {checkboxes}
+        {/* <p>
+          Type order for pages seperated by commas (no spaces) Default:normal in original pdf
+        </p>
+        <input type="text" onChange={(e)=>setOrder(e.target.value)} value={order}/> */}
         <button onClick={handleSubmit}>create</button>
+
       </div>
       {loading === false ? <button onClick={handleDownload}>Download</button> : null}
     </>
