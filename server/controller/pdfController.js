@@ -36,7 +36,7 @@ const getPDF = async (req, res) => {
 }
 
 const getAllPDF = async (req, res) => {
-    let results =  PDF.find({ createdBy: req.user.userId })
+    let results = PDF.find({ createdBy: req.user.userId })
     results.sort('-createdAt')
     const result = await results
     res.status(StatusCodes.OK).json({ result })

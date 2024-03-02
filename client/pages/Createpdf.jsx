@@ -27,7 +27,6 @@ function Createpdf({ pages, file }) {
     } catch (error) {
       console.log(error)
     }
-
   }
 
   const handleCheckboxChange = (event) => {
@@ -55,17 +54,9 @@ function Createpdf({ pages, file }) {
       <div>
         select pages:
         {checkboxes}
-
-
         <button onClick={handleSubmit}>create</button>
       </div>
-
-      {/* {link && <button onClick={handleDownload}>Download</button>} */}
       {loading === false ? <button onClick={handleDownload}>Download</button> : null}
-
-
-
-
     </>
   )
 }
