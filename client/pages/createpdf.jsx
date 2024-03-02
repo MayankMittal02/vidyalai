@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useState } from 'react';
-import { uploadPDF } from '../apicalls/pdf';
-import { PDFDocument } from 'pdf-lib'
-import { sendStoredPdfToBackend } from '../utils/sendpdf';
+import { createPDF } from '../apicalls/pdf';
 
-function Createpdf({ pages,file }) {
+function Createpdf({ pages, file }) {
   console.log(file)
 
   const [link, setLink] = useState(null)
@@ -12,9 +10,7 @@ function Createpdf({ pages,file }) {
   const [loading, setLoading] = useState(true)
 
   const handleDownload = () => {
-    // Replace 'path_to_your_file' with the actual path to your file
-    const fileUrl = link;
-    window.open(fileUrl, '_blank');
+    window.open(link, '_blank');
   };
 
 
@@ -22,8 +18,11 @@ function Createpdf({ pages,file }) {
     e.preventDefault();
     try {
       setLoading(true)
-      const respone = await sendStoredPdfToBackend(selectedPages,file)
-      setLink(respone.data.link)
+      const formData = new FormData();
+      formData.append('pdf', file);
+      formData.append('selectedPages', selectedPages)
+      const response = await createPDF(formData)
+      setLink(response.data.link)
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -32,6 +31,7 @@ function Createpdf({ pages,file }) {
   }
 
   const handleCheckboxChange = (event) => {
+    setLoading(true)
     const value = event.target.value;
     if (event.target.checked) {
       setSelectedPages([...selectedPages, value]);
@@ -61,7 +61,7 @@ function Createpdf({ pages,file }) {
       </div>
 
       {/* {link && <button onClick={handleDownload}>Download</button>} */}
-      {loading === false ? <button onClick={handleDownload}>Download</button>:null}
+      {loading === false ? <button onClick={handleDownload}>Download</button> : null}
 
 
 

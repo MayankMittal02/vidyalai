@@ -32,7 +32,7 @@ function Uploadpdf() {
   return (
     <>
       <div>
-        <input type="file" onChange={handleFileChange} />
+        <input type="file" onChange={handleFileChange} accept='.pdf'/>
         <button onClick={handleSubmit}>Upload</button>
       </div>
       {pages > 0 ? <Createpdf pages={pages} file={file}></Createpdf> : null}

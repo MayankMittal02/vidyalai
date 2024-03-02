@@ -3,7 +3,7 @@ const cloudinary = require('cloudinary').v2;
 const fs = require('fs').promises;
 const PDF = require('../models/PDF');
 const { StatusCodes } = require('http-status-codes')
-const { PDFDocument, StandardFonts, rgb } = require('pdf-lib')
+const { PDFDocument } = require('pdf-lib')
 
 
 
