@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload PDF and Display Pages</title>
+  <style>
+    #pdfViewer canvas {
+      display: block;
+      margin: 10px auto;
+      border: 1px solid black;
+    }
+    #pageNavigation {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Upload PDF and Display Pages</h1>
+  <form id="pdfForm" enctype="multipart/form-data">
+    <input type="file" id="pdfFile" accept=".pdf" required>
+    <button type="submit">Upload PDF</button>
+  </form>
+  <div id="pdfViewer"></div>
+  <div id="pageNavigation">
+    <button id="prevPage">Previous</button>
+    <span id="pageNum"></span>
+    <button id="nextPage">Next</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+  <script>
+    let pdfData = null;
+    let currentPage = 1;
+
+    document.getElementById('pdfForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const fileInput = document.getElementById('pdfFile');
+      const file = fileInput.files[0];
+
+      if (!file || !file.type.match('application/pdf')) {
+        alert('Please select a PDF file.');
+        return;
+      }
+
+      const fileReader = new FileReader();
+      fileReader.onload = function() {
+        pdfData = new Uint8Array(this.result);
+        displayPDF(pdfData);
+      };
+      fileReader.readAsArrayBuffer(file);
+    });
+
+    document.getElementById('prevPage').addEventListener('click', function() {
+      if (currentPage > 1) {
+        currentPage--;
+        displayPage(currentPage);
+      }
+    });
+
+    document.getElementById('nextPage').addEventListener('click', function() {
+      if (!pdfData) {
+        console.error('No PDF data available.');
+        return;
+      }
+
+      pdfjsLib.getDocument({data: pdfData}).promise.then(function(pdf) {
+        if (currentPage < pdf.numPages) {
+          currentPage++;
+          displayPage(currentPage);
+        }
+      }).catch(function(error) {
+        console.error('Error occurred while loading PDF:', error);
+      });
+    });
+
+    function displayPDF(pdfData) {
+      const pdfContainer = document.getElementById('pdfViewer');
+      pdfContainer.innerHTML = ''; // Clear previous content
+
+      pdfjsLib.getDocument({data: pdfData}).promise.then(function(pdf) {
+        displayPage(1); // Display first page initially
+      }).catch(function(error) {
+        console.error('Error occurred while loading PDF:', error);
+      });
+    }
+
+    function displayPage(pageNum) {
+      const pdfContainer = document.getElementById('pdfViewer');
+      const pageNumSpan = document.getElementById('pageNum');
+
+      pdfContainer.innerHTML = ''; // Clear previous content
+
+      pdfjsLib.getDocument({data: pdfData}).promise.then(function(pdf) {
+        pdf.getPage(pageNum).then(function(page) {
+          const canvas = document.createElement('canvas');
+          pdfContainer.appendChild(canvas);
+          const context = canvas.getContext('2d');
+
+          const viewport = page.getViewport({scale: 1});
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          page.render(renderContext);
+
+          pageNumSpan.textContent = `Page ${pageNum} of ${pdf.numPages}`;
+        });
+      }).catch(function(error) {
+        console.error('Error occurred while loading PDF:', error);
+      });
+    }
+  </script>
+</body>
+</html>

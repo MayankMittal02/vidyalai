@@ -36,7 +36,9 @@ const getPDF = async (req, res) => {
 }
 
 const getAllPDF = async (req, res) => {
-    let result = await PDF.find({ createdBy: req.user.userId })
+    let results =  PDF.find({ createdBy: req.user.userId })
+    results.sort('-createdAt')
+    const result = await results
     res.status(StatusCodes.OK).json({ result })
 }
 
@@ -45,12 +47,8 @@ const createPDF = async (req, res) => {
     try {
         const filePath = req.files.pdf.tempFilePath;
         var { selectedPages } = req.body
-        // console.log(typeof(selectedPages))
-        selectedPages = selectedPages.replace(/,/g, '');
-
-
-
-
+        selectedPages = selectedPages.split(',').map(item => parseInt(item))
+        selectedPages.sort()
         const pdfBytes = await fs.readFile(filePath);
         const pdfDoc = await PDFDocument.load(pdfBytes);
         const newPdfDoc = await PDFDocument.create();
@@ -72,19 +70,7 @@ const createPDF = async (req, res) => {
         await fs.unlink(editedPdfPath);
         await fs.unlink(filePath);
 
-
-
-
-        // res.contentType("application/pdf");
-        // res.setHeader('Content-Length', newPdfBytes.length)
-        // res.set('Content-Disposition', 'attachment; filename="your-filename.pdf"');
-
-        // res.write(pdfBytes)
         res.status(StatusCodes.CREATED).json({ link: result.secure_url })
-        // res.send("hello")
-
-
-
     }
 
     catch (error) {
