@@ -4,7 +4,8 @@ import { uploadPDF } from '../apicalls/pdf';
 import { PDFDocument } from 'pdf-lib'
 import { sendStoredPdfToBackend } from '../utils/sendpdf';
 
-function Createpdf({ pages }) {
+function Createpdf({ pages,file }) {
+  console.log(file)
 
   const [link, setLink] = useState(null)
   const [selectedPages, setSelectedPages] = useState([])
@@ -21,7 +22,7 @@ function Createpdf({ pages }) {
     e.preventDefault();
     try {
       setLoading(true)
-      const respone = await sendStoredPdfToBackend(selectedPages)
+      const respone = await sendStoredPdfToBackend(selectedPages,file)
       setLink(respone.data.link)
       setLoading(false)
     } catch (error) {
@@ -48,11 +49,6 @@ function Createpdf({ pages }) {
       </div>
     );
   }
-
-
-
-
-
 
   return (
     <>

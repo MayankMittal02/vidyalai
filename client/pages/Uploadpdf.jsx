@@ -19,15 +19,7 @@ function Uploadpdf() {
     formData.append('pdf', file);
 
     try {
-      const reader = new FileReader();
 
-      reader.onload = function (event) {
-        const pdfData = event.target.result;
-        localStorage.setItem('pdfData', pdfData);
-        console.log('PDF file stored in local storage.');
-      };
-
-      reader.readAsDataURL(file);
       const response = await uploadPDF(formData)
       setPages(response.data.pages)
     } catch (error) {
@@ -43,7 +35,7 @@ function Uploadpdf() {
         <input type="file" onChange={handleFileChange} />
         <button onClick={handleSubmit}>Upload</button>
       </div>
-      {pages > 0 ? <Createpdf pages={pages}></Createpdf> : null}
+      {pages > 0 ? <Createpdf pages={pages} file={file}></Createpdf> : null}
 
 
     </>
