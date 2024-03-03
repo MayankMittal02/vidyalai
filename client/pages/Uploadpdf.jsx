@@ -47,10 +47,10 @@ function Uploadpdf() {
       <div>
         <input type="file" onChange={handleFileChange} accept='.pdf' />
         <button onClick={handleSubmit}>Upload</button>
-        {loading ? null :<button onClick={handleSeeButton}>see uploaded pdf</button>}
+        {loading ? null : <iframe src={link} frameborder="0"></iframe>}
 
       </div>
-      {pages > 0 ? <Createpdf pages={pages} file={file}></Createpdf> : null}
+      {loading ? null : <Createpdf pages={pages} file={file}></Createpdf>}
 
 
     </>
