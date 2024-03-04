@@ -35,19 +35,12 @@ function Uploadpdf() {
 
   }
 
-  function handleSeeButton(e) {
-    e.preventDefault()
-    window.open(link, '_blank');
-
-  }
-
-
   return (
     <>
       <div>
         <input type="file" onChange={handleFileChange} accept='.pdf' />
         <button onClick={handleSubmit}>Upload</button>
-        {loading ? null : <iframe src={link} frameborder="0"></iframe>}
+        {loading ? null : <iframe src={link} frameBorder="0"></iframe>}
 
       </div>
       {loading ? null : <Createpdf pages={pages} file={file}></Createpdf>}
