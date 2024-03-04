@@ -3,6 +3,7 @@ import { Form, message } from "antd";
 import { Link } from "react-router-dom";
 
 import { loginUser } from "../apicalls/auth";
+import Footer from "./Footer";
 
 function Login() {
   async function onFinish(values) {
@@ -72,6 +73,7 @@ function Login() {
           <p>Password : test</p>
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

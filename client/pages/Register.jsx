@@ -2,6 +2,7 @@ import React from "react";
 import { Form, message } from "antd";
 import { Link } from "react-router-dom";
 import { registerUser } from "../apicalls/auth";
+import Footer from "./Footer";
 
 function Register() {
   async function onFinish(values) {
@@ -19,7 +20,7 @@ function Register() {
     <>
       <div className="flex flex-col items-center justify-center min-h-screen">
         <Form layout="vertical" onFinish={onFinish}>
-        <Form.Item
+          <Form.Item
             name="name"
             label={
               <label className="mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -81,6 +82,7 @@ function Register() {
           </div>
         </Form>
       </div>
+      <Footer />
     </>
   );
 }
