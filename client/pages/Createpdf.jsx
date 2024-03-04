@@ -8,7 +8,7 @@ function Createpdf({ pages, file }) {
   const [link, setLink] = useState(null);
   const [selectedPages, setSelectedPages] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const [order, setOrder] = useState("")
+  const [loader, Setloader] = useState(false);
 
   const handleDownload = () => {
     window.open(link, "_blank");
@@ -18,6 +18,7 @@ function Createpdf({ pages, file }) {
     e.preventDefault();
     try {
       setLoading(true);
+      Setloader(true);
       const formData = new FormData();
       formData.append("pdf", file);
       formData.append("selectedPages", selectedPages);
@@ -25,6 +26,7 @@ function Createpdf({ pages, file }) {
       const response = await createPDF(formData);
       setLink(response.data.link);
       setLoading(false);
+      Setloader(false);
     } catch (error) {
       console.log(error);
     }
@@ -78,11 +80,17 @@ function Createpdf({ pages, file }) {
 
         <div className="w-full flex gap-2 ">
           <button
+            disabled={loader}
             onClick={handleSubmit}
-            className="p-2 bg-black w-1/2 items-center justify-center text-white font-medium rounded-md hover:bg-white hover:text-black duration-100 transition-all hover:border-2 border-2 hover:border-black"
+            className="relative min-h-10 p-2 bg-black w-1/2 items-center justify-center text-white font-medium rounded-md hover:bg-white hover:text-black duration-100 transition-all hover:border-2 border-2 hover:border-black"
           >
-            Create
+            {loader ? (
+              <img src="..\loading.png" className="absolute inset-0 m-auto animate-spin h-6 w-6" alt="Loading..." />
+            ) : (
+              'Create'
+            )}
           </button>
+
           {loading === false ? (
             <button
               onClick={handleDownload}

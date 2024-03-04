@@ -7,13 +7,16 @@ function Uploadpdf() {
   const [pages, setPages] = useState(0);
   const [link, setLink] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(false);
 
   function handleFileChange(e) {
     setFile(e.target.files[0]);
     setLoading(true);
+    setLoader(false);
   }
 
   async function handleSubmit(e) {
+    setLoader(true);
     setLoading(true);
     e.preventDefault();
     const formData = new FormData();
@@ -47,16 +50,22 @@ function Uploadpdf() {
             Upload
           </button>
         </div>
-        <div className="bg-slate-400 min-h-96 justify-center items-center rounded-md flex gap-4 p-4">
-          {loading ? (
-            <p className="flex-col gap-2 items-center align-middle justify-center">
-              <img src="..\loading.png" className="h-16 animate-spin" alt="" />
-            </p>
-          ) : (
-            <iframe src={link} height={400} width={400} className="" />
-          )}
-          {loading ? null : <Createpdf pages={pages} file={file}></Createpdf>}
-        </div>
+        {loader ? (
+          <div className="bg-slate-400 min-h-96 justify-center items-center rounded-md flex gap-4 p-4">
+            {loading ? (
+              <p className="flex-col gap-2 items-center align-middle justify-center">
+                <img
+                  src="..\loading.png"
+                  className="h-16 animate-spin"
+                  alt=""
+                />
+              </p>
+            ) : (
+              <iframe src={link} height={400} width={400} className="" />
+            )}
+            {loading ? null : <Createpdf pages={pages} file={file}></Createpdf>}
+          </div>
+        ) : null}
       </div>
     </>
   );
