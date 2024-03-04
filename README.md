@@ -11,7 +11,7 @@ This web application allows users to upload a PDF file, select specific pages fr
 - Users can see their previously uploaded PDF files.
 
 ## Getting Started
-1. Clone the repository using: git clone https://github.com/MayankMittal02/vidyalai.git
+1. Clone the repository
 2. Frontend Setup
    - Install dependencies
    - Build the frontend
