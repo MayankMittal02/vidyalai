@@ -6,6 +6,8 @@ import Footer from "./Footer";
 
 function Register() {
   async function onFinish(values) {
+
+    try{
     const response = await registerUser(values);
     if (response.success) {
       message.success(response.message);
@@ -13,6 +15,9 @@ function Register() {
       window.location.href = "/";
     } else {
       message.error(response.message);
+    }}
+    catch(err){
+      message.error(err.response.data.message)
     }
   }
 

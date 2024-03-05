@@ -9,16 +9,16 @@ function Home() {
 
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosInstance.get("/pdf/getpdf");
-        setData(response.data.result);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const response = await axiosInstance.get("/pdf/getpdf");
+      setData(response.data.result);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -28,7 +28,7 @@ function Home() {
         <div className="p-2 items-center w-3/4 flex justify-center">
           {isAuthenticated ? (
             <div className="w-full ">
-              <Uploadpdf />
+              <Uploadpdf onUpload={fetchData} />
               <div className=" bg-slate-400 flex flex-col w-full items-center justify-center my-4 rounded-md">
                 <div className="text-lg font-semibold py-6">
                   Your Saved PDF:
@@ -41,7 +41,7 @@ function Home() {
                         target="_blank"
                         className="block max-w-sm p-2 bg-slate-200 border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
                       >
-                        <h5 class="text-md font-semibold tracking-tight text-gray-900 dark:text-white">
+                        <h5 className="text-md font-semibold tracking-tight text-gray-900 dark:text-white">
                           {item.name}
                         </h5>
                       </a>

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { uploadPDF } from "../apicalls/pdf";
 import Createpdf from "./Createpdf";
+import { message } from "antd";
 
-function Uploadpdf() {
+function Uploadpdf({ onUpload }) {
   const [file, setFile] = useState(null);
   const [pages, setPages] = useState(0);
   const [link, setLink] = useState(null);
@@ -16,6 +17,10 @@ function Uploadpdf() {
   }
 
   async function handleSubmit(e) {
+    if (!file) {
+      message.error("Please choose a PDF file to uplaod");
+      return;
+    }
     setLoader(true);
     setLoading(true);
     e.preventDefault();
@@ -26,8 +31,16 @@ function Uploadpdf() {
       const response = await uploadPDF(formData);
       setPages(response.data.pages);
       setLink(response.data.link);
+      onUpload();
     } catch (error) {
-      console.error("Error uploading file: ", error);
+      if (error?.response?.data?.message) {
+        message.error(error.response.data.message);
+        setLoader(false);
+      }
+      else{
+        message.error("Something went Wrong")
+        setLoader(false);
+      }
     }
     setLoading(false);
   }
@@ -57,7 +70,7 @@ function Uploadpdf() {
                 <img
                   src="..\loading.png"
                   className="h-16 animate-spin"
-                  alt=""
+                  alt="Loading ..."
                 />
               </p>
             ) : (
