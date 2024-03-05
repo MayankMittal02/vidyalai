@@ -31,9 +31,9 @@ cd client
 npm i
 npm run build
 cd..
-cd client
+cd server
 npm i
-nodemon app.js
+npm start
 ```
 
 ## Usage
