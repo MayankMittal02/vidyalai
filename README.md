@@ -38,7 +38,7 @@ npm start
 
 ## Usage
 
-1. Open your browser and go to http://localhost:3000.
+1. Open your browser and go to http://localhost:5000.
 2. Register or Login with Demo Credentials
    - Email : `test@test.com`
    - Password : `test`
