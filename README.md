@@ -58,6 +58,12 @@ npm start
 - ExpressJs
 - Mongoose
 
+## Database Diagram
+![Example Image](https://github.com/MayankMittal02/vidyalai/blob/main/db%20diagram.png)
+
+## Using App
+![Using APP](https://github.com/MayankMittal02/vidyalai/blob/main/Using%20App.gif)
+
 ## Contributors
 
 - Mayank Mittal
